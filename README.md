@@ -6,3 +6,7 @@
  create your branch : 'git checkout -b your_branch_name'
  edit code and commit with this code : 'git add .' , 'git commit -m "Some commit message"' , 'git push origin your_brach_name'
  DO NOT modify other people's work and the public files, since that will create a git confilict.
+# Roles
+Dasheng Yao: 1 - 4 <br />
+Cindy Feldman: 5 - 8  <br />
+Mir Ali: 9 - 12  <br />
