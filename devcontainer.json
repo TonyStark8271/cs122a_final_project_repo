@@ -1,0 +1,34 @@
+// To run python, use the command "python3"
+// To run MySQL, use the command "mysql -u root -p" and enter the password
+// -> You can also run this on your local machine as the container runs:
+// -> "mysql -h 127.0.0.1 -u root -p"
+
+{
+    "name": "MySQL Dev Container",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [3306],
+    "remoteUser": "root",
+    "containerEnv": { // Set your password here
+        "MYSQL_ROOT_PASSWORD": "rootpassword"
+    },
+    "portsAttributes": {
+        "3306": {
+            "label": "MySQL",
+            "onAutoForward": "notify"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            // Currently looking for a proper extension, but as port 3306 is exported, you can try any MySQL client
+            "extensions": [
+                "ms-python.python"
+            ]
+        }
+    },
+    "postStartCommand": "/usr/local/bin/init.sh", // Run startup script
+    // "mounts": [ // Currently can't make this work, permission issues
+    //     "source=${localWorkspaceFolder}/database,target=/var/lib/mysql,type=bind,consistency=cached"
+    // ]
+}
