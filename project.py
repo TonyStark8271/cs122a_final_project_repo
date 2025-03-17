@@ -3,6 +3,13 @@ import os
 import mysql.connector as mysql
 import csv
 import re
+from utility import connect_db
+from datetime import datetime
+
+from functionsDY import insertViewer
+
+date_format = "%Y-%m-%d"
+
 
 """ Connecting to database : 
     -- I appreciate the work on ed, but the code has no comment...<T_T>
@@ -21,35 +28,6 @@ import re
         password: 'password',
         database: 'cs122a'
 """
-DB_CONFIG = {
-    "user": "root",
-    "password": "",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "database": "zotstreaming",
-    "allow_local_infile": True
-}
-
-def connect_db():
-    """Funciton for establish connection to the MySQL database"""
-    try:
-        conn = mysql.connect(**DB_CONFIG)
-        print("connected")
-        return conn
-    except mysql.Error as err:
-        print("Failed to connect to the MySql database")
-        sys.exit(1)
-
-def execute_query(conn, query, params=None):
-    """Executes a given SQL query and commit the changes"""
-    try:
-        cursor = conn.cursor()
-        cursor.execute(query, params or ())
-        conn.commit()
-        cursor.close()
-    except mysql.Error as err:
-        print("Failed to execute query")
-        sys.exit(1)
 
 def drop_all_tables():
     """Delete all exsting table, and close the cursor"""
@@ -140,5 +118,60 @@ def import_data(path):
 
 
 if __name__ == "__main__":
-    path = sys.argv[2]
-    import_data(path)
+    if (sys.argv[1] == "import"):
+        path = sys.argv[2]
+        import_data(path)
+
+    # you can pass in the global_connect into the function as a parameter
+    # just remeber to close the cursor you created or use execute_query 
+    # for safety
+    global_connect = connect_db()
+    if (sys.argv[1] == "insertViewer"):
+        insertViewer(global_connect,
+                     int(sys.argv[2]), # uid
+                     sys.argv[3], # email
+                     sys.argv[4], # nickname
+                     sys.argv[5], # street
+                     sys.argv[6], # city
+                     sys.argv[7], # state
+                     int(sys.argv[8]), # zip_code
+                     sys.argv[9], # genres
+                     datetime.strptime(sys.argv[10], date_format).date(), # joined_date
+                     sys.argv[11], # first
+                     sys.argv[12], # last
+                     sys.argv[13], #subscription
+                     )
+    elif (sys.argv[1] == "addGenre"):
+        #addGenre()
+        pass
+    elif (sys.argv[1] == "deleteViewer"):
+        #deleteViewer()
+        pass
+    elif (sys.argv[1] == "insertMovie"):
+        #insertMovie
+        pass
+    elif (sys.argv[1] == "insertSession"):
+        #inserSession
+        pass
+    elif (sys.argv[1] == "updateRelease"):
+        #updateRelease
+        pass
+    elif (sys.argv[1] == "listReleases"):
+        #listReleases
+        pass
+    elif (sys.argv[1] == "popularRelease"):
+        #popularRelease
+        pass
+    elif (sys.argv[1] == "releaseTitle"):
+        #releaseTitle
+        pass
+    elif (sys.argv[1] == "activeViewer"):
+        #activeViewer
+        pass
+    elif (sys.argv[1] == "videosViewed"):
+        #videosViewed
+        pass
+
+    if (global_connect.is_connected()):
+        global_connect.commit()
+        global_connect.close()

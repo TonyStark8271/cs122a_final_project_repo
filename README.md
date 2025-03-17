@@ -35,3 +35,6 @@ steps to use the shell:
     I think we all get A+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ for this
 
 the + is the separation line, add whatever comments after this :)
+
+# new item: I put the helper functions into the utility
+Just use import and use the helper functions, it'll save you a lot of trouble, since it create the cursor, and all you need to do is code up the querys, it'll execute for you, and do automatic close
