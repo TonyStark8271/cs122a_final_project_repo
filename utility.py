@@ -2,12 +2,9 @@ import mysql.connector as mysql
 import sys
 
 DB_CONFIG = {
-    "user": "root",
-    "password": "",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "database": "zotstreaming",
-    "allow_local_infile": True
+    "user": "test",
+    "password": "password",
+    "database": "cs122a",
 }
 
 

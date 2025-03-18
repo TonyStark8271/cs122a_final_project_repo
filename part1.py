@@ -32,10 +32,9 @@ def addGenre(conn, uid, genre):
         result = cursor.fetchone()
 
         if result:
-            current_genres = result[0].lower().split(';')
-            if genre.lower() in current_genres:
-                print("already exist")
-                cursor.close()
+            current_genres = result[0]
+            result_list= result[0].lower().split(';')
+            if genre.lower() in result_list:
                 return True
             else:
                 append_genre = current_genres + ';' + genre if current_genres else genre 
@@ -43,8 +42,7 @@ def addGenre(conn, uid, genre):
                 cursor.execute(update_genre, (append_genre, uid))
                 conn.commit()
                 return True
-        else:
-            print("User not found")
+        cursor.close()
     except mysql.Error as err:
         print("Fail: ", err)
     finally:

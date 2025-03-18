@@ -53,7 +53,6 @@ def drop_all_tables():
         # Re-Enable FOREIGN key checks
         cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
         conn.commit()
-        print("Previous data deleted, database cleaned up")
     except mysql.Error as err:
         print("Failed: ", err)
     finally:
@@ -101,24 +100,27 @@ def import_data(path):
                 file_path = os.path.join(path, file)
                 table = file.replace(".csv", "") # Get table name
 
-                print(f"creating {table}")
                 headers, data_types = read_columns(file_path)
 
                 create_table_query = f"CREATE TABLE `{table}` ({', '.join(f'`{col}` {type}'for col, type in zip(headers, data_types))});"
                 cursor.execute(create_table_query)
-                print(f"Table '{table}' created")
 
+                with open(file_path, newline = '') as f:
+                    reader = csv.reader(f)
+                    next(reader)
 
-                file_path = file_path.replace("\\", "/")
-                import_data_query = f"LOAD DATA LOCAL INFILE '{file_path}' INTO TABLE `{table}` FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
-                cursor.execute(import_data_query)
-                print(f"Table '{table}' imported data from '{file_path}'")
+                    insert_query = f"INSERT INTO `{table}` ({', '.join(f'`{col}`' for col in headers)}) VALUES ({', '.join(['%s'] * len(headers))})"
+                    data = [tuple(row) for row in reader]
+                    if data:
+                        cursor.executemany(insert_query, data)
     except mysql.Error as err:
         print("Failed: ", err)
+        return False
     finally:
         conn.commit()
         cursor.close()
         conn.close()
+    return True
 
 
 if __name__ == "__main__":
