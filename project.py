@@ -54,7 +54,7 @@ def drop_all_tables():
         cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
         conn.commit()
     except mysql.Error as err:
-        print("Failed: ", err)
+        print("Fail")
     finally:
         cursor.close()
         conn.close()
@@ -99,6 +99,7 @@ def import_data(path):
             if file.endswith(".csv"):
                 file_path = os.path.join(path, file)
                 table = file.replace(".csv", "") # Get table name
+                table = table.capitalize()
 
                 headers, data_types = read_columns(file_path)
 
@@ -113,14 +114,14 @@ def import_data(path):
                     data = [tuple(row) for row in reader]
                     if data:
                         cursor.executemany(insert_query, data)
+        print("Success")
     except mysql.Error as err:
-        print("Failed: ", err)
+        print("Fail")
         return False
     finally:
         conn.commit()
         cursor.close()
         conn.close()
-    return True
 
 
 if __name__ == "__main__":

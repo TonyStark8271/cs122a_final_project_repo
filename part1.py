@@ -17,9 +17,9 @@ def insertViewer(conn, uid, email,
         VALUES ('{uid}', '{email}', '{joined_date}', '{nickname}', '{street}', '{city}', '{state}', '{zip_code}', '{genres}');
         """
         execute_query(conn, inserting_user)
-        return True
+        print("Success")
     except mysql.Error as err:
-        print("Fail: ", err)
+        print("Fail")
     finally:
         conn.close()
 
@@ -35,16 +35,16 @@ def addGenre(conn, uid, genre):
             current_genres = result[0]
             result_list= result[0].lower().split(';')
             if genre.lower() in result_list:
-                return True
+                print("Success")
             else:
                 append_genre = current_genres + ';' + genre if current_genres else genre 
                 update_genre = "UPDATE Users SET genres = %s WHERE uid = %s;"
                 cursor.execute(update_genre, (append_genre, uid))
                 conn.commit()
-                return True
+                print("Success")
         cursor.close()
     except mysql.Error as err:
-        print("Fail: ", err)
+        print("Fail")
     finally:
         conn.close()
 
@@ -56,8 +56,6 @@ def deleteViewer(conn, uid):
 
         deleteUserQuerry = f"DELETE FROM Users WHERE uid = {uid}"
         execute_query(conn, deleteUserQuerry)
-
-        print("Deleted")
-        return True
+        print("Success")
     except mysql.Error as err:
-        print("Fail: ", err)
+        print("Fail")
