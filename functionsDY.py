@@ -49,3 +49,17 @@ def addGenre(conn, uid, genre):
         print("Fail: ", err)
     finally:
         conn.close()
+
+
+def deleteViewer(conn, uid):
+    try:
+        deleViewerQuerry = f"DELETE FROM Viewers WHERE uid = {uid}"
+        execute_query(conn, deleViewerQuerry)
+
+        deleteUserQuerry = f"DELETE FROM Users WHERE uid = {uid}"
+        execute_query(conn, deleteUserQuerry)
+
+        print("Deleted")
+        return True
+    except mysql.Error as err:
+        print("Fail: ", err)
