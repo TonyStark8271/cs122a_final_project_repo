@@ -1,25 +1,7 @@
-import sys
 import mysql.connector as mysql
 
-DB_CONFIG = {
-    "user": "root",
-    "password": "Sixersinseven09",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "database": "zotstreaming",
-}
-
-def connect_db():
-    """Function to establish connection to MySQL database"""
-    try:
-        conn = mysql.connect(**DB_CONFIG)
-        return conn
-    except mysql.Error as err:
-        print("Failed to connect to the MySQL database:", err)
-        sys.exit(1)
-
-# Task 9: Get Most Popular Releases
 def popularRelease(conn, N):
+    """Task 9: Get Most Popular Releases"""
     cursor = conn.cursor()
     cursor.execute(
         "SELECT r.rid, r.title, COUNT(rv.rid) AS reviewCount "
@@ -35,8 +17,9 @@ def popularRelease(conn, N):
         print(",".join(map(str, row)))
     cursor.close()
 
-# Task 10: Get Release Title
+
 def releaseTitle(conn, sid):
+    """Task 10: Get Release Title"""
     cursor = conn.cursor()
     cursor.execute(
         "SELECT r.rid, r.title AS release_title, r.genre, v.title AS video_title, "
@@ -53,8 +36,9 @@ def releaseTitle(conn, sid):
         print(",".join(map(str, row)))
     cursor.close()
 
-# Task 11: Get Active Viewers
+
 def activeViewer(conn, N, start_date, end_date):
+    """Task 11: Get Active Viewers"""
     cursor = conn.cursor()
     cursor.execute(
         "SELECT v.uid, v.first_name, v.last_name "
@@ -74,8 +58,9 @@ def activeViewer(conn, N, start_date, end_date):
         print("No results found.")
     cursor.close()
 
-# Task 12: Get Videos Viewed
+
 def videosViewed(conn, rid):
+    """Task 12: Get Videos Viewed"""
     cursor = conn.cursor()
     cursor.execute(
         "SELECT v.rid, v.ep_num, v.title, v.length, COUNT(DISTINCT s.uid) AS viewer_count "
@@ -90,28 +75,3 @@ def videosViewed(conn, rid):
     for row in results:
         print(",".join(map(str, row)))
     cursor.close()
-
-# Main Execution
-if __name__ == "__main__":
-    conn = connect_db()
-    command = sys.argv[1]
-
-    if command == "popularRelease":  # Task 9
-        N = int(sys.argv[2])
-        popularRelease(conn, N)
-
-    elif command == "releaseTitle":  # Task 10
-        sid = int(sys.argv[2])
-        releaseTitle(conn, sid)
-
-    elif command == "activeViewer":  # Task 11
-        N = int(sys.argv[2])
-        start_date = sys.argv[3]
-        end_date = sys.argv[4]
-        activeViewer(conn, N, start_date, end_date)
-
-    elif command == "videosViewed":  # Task 12
-        rid = int(sys.argv[2])
-        videosViewed(conn, rid)
-
-    conn.close()
