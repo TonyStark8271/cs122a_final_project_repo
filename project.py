@@ -9,8 +9,8 @@ from datetime import datetime
 
 from functionsDY import insertViewer, addGenre
 from part2 import insertMovie, insertSession, updateRelease, listReleases
+from part3 import popularRelease, releaseTitle, activeViewer, videosViewed 
 date_format = "%Y-%m-%d"
-
 
 """ Connecting to database : 
     -- I appreciate the work on ed, but the code has no comment...<T_T>
@@ -175,17 +175,23 @@ if __name__ == "__main__":
         int(sys.argv[2])#uid
         )
         pass
-    elif (sys.argv[1] == "popularRelease"):
-        #popularRelease
+    elif sys.argv[1] == "popularRelease":  # Task 9
+        N = int(sys.argv[2])
+        popularRelease(conn, N)
         pass
-    elif (sys.argv[1] == "releaseTitle"):
-        #releaseTitle
+    elif sys.argv[1] == "releaseTitle":  # Task 10
+        sid = int(sys.argv[2])
+        releaseTitle(conn, sid)
         pass
-    elif (sys.argv[1] == "activeViewer"):
-        #activeViewer
+    elif sys.argv[1] == "activeViewer":  # Task 11
+        N = int(sys.argv[2])
+        start_date = sys.argv[3]
+        end_date = sys.argv[4]
+        activeViewer(conn, N, start_date, end_date)
         pass
-    elif (sys.argv[1] == "videosViewed"):
-        #videosViewed
+    elif sys.argv[1] == "videosViewed":  # Task 12
+        rid = int(sys.argv[2])
+        videosViewed(conn, rid)
         pass
 
     if (global_connect.is_connected()):
