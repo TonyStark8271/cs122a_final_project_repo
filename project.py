@@ -3,11 +3,12 @@ import os
 import mysql.connector as mysql
 import csv
 import re
+
 from utility import connect_db
 from datetime import datetime
 
 from functionsDY import insertViewer
-
+from part2 import insertMovie, insertSession, updateRelease, listReleases
 date_format = "%Y-%m-%d"
 
 
@@ -105,7 +106,7 @@ def import_data(path):
                 create_table_query = f"CREATE TABLE `{table}` ({', '.join(f'`{col}` {type}'for col, type in zip(headers, data_types))});"
                 cursor.execute(create_table_query)
                 print(f"Table '{table}' created")
-
+                file_path = file_path.replace("\\", "/")
                 import_data_query = f"LOAD DATA LOCAL INFILE '{file_path}' INTO TABLE `{table}` FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
                 cursor.execute(import_data_query)
                 print(f"Table '{table}' imported data from '{file_path}'")
@@ -148,16 +149,32 @@ if __name__ == "__main__":
         #deleteViewer()
         pass
     elif (sys.argv[1] == "insertMovie"):
-        #insertMovie
+        insertMovie(global_connect,
+        int(sys.argv[2]),#sid
+        sys.argv[3])#website_url
         pass
     elif (sys.argv[1] == "insertSession"):
-        #inserSession
+        insertSession(global_connect,
+        int(sys.argv[2]),#sid,
+        int(sys.argv[3]),#uid
+        int(sys.argv[4]),#rid
+        sys.argv[5],#ep_num
+        datetime.strptime(sys.argv[6], "%Y-%m-%d %H:%M:%S" ).date(),#initiate_at
+        datetime.strptime(sys.argv[7], "%Y-%m-%d %H:%M:%S" ).date(),#leave_at
+        sys.argv[8],#quality
+        sys.argv[9]#device
+        )
         pass
     elif (sys.argv[1] == "updateRelease"):
-        #updateRelease
+        updateRelease(global_connect,
+        int(sys.argv[2]),#rid
+        sys.argv[3]#title
+        )
         pass
     elif (sys.argv[1] == "listReleases"):
-        #listReleases
+        listReleases(
+        int(sys.argv[2])#uid
+        )
         pass
     elif (sys.argv[1] == "popularRelease"):
         #popularRelease
