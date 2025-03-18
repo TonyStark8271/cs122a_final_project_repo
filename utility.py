@@ -15,7 +15,6 @@ def connect_db():
     """Funciton for establish connection to the MySQL database"""
     try:
         conn = mysql.connect(**DB_CONFIG)
-        print("connected")
         return conn
     except mysql.Error as err:
         print("Failed to connect to the MySql database")

@@ -7,10 +7,11 @@ import re
 from utility import connect_db
 from datetime import datetime
 
-from functionsDY import insertViewer, addGenre
+from part1 import insertViewer, addGenre, deleteViewer
 from part2 import insertMovie, insertSession, updateRelease, listReleases
 from part3 import popularRelease, releaseTitle, activeViewer, videosViewed 
 date_format = "%Y-%m-%d"
+
 
 """ Connecting to database : 
     -- I appreciate the work on ed, but the code has no comment...<T_T>
@@ -106,6 +107,8 @@ def import_data(path):
                 create_table_query = f"CREATE TABLE `{table}` ({', '.join(f'`{col}` {type}'for col, type in zip(headers, data_types))});"
                 cursor.execute(create_table_query)
                 print(f"Table '{table}' created")
+
+
                 file_path = file_path.replace("\\", "/")
                 import_data_query = f"LOAD DATA LOCAL INFILE '{file_path}' INTO TABLE `{table}` FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
                 cursor.execute(import_data_query)
@@ -145,13 +148,11 @@ if __name__ == "__main__":
     elif (sys.argv[1] == "addGenre"):
         addGenre(global_connect, sys.argv[2], sys.argv[3])
     elif (sys.argv[1] == "deleteViewer"):
-        #deleteViewer()
-        pass
+        deleteViewer(global_connect, sys.argv[2])
     elif (sys.argv[1] == "insertMovie"):
         insertMovie(global_connect,
         int(sys.argv[2]),#sid
         sys.argv[3])#website_url
-        pass
     elif (sys.argv[1] == "insertSession"):
         insertSession(global_connect,
         int(sys.argv[2]),#sid,
@@ -163,36 +164,30 @@ if __name__ == "__main__":
         sys.argv[8],#quality
         sys.argv[9]#device
         )
-        pass
     elif (sys.argv[1] == "updateRelease"):
         updateRelease(global_connect,
         int(sys.argv[2]),#rid
         sys.argv[3]#title
         )
-        pass
     elif (sys.argv[1] == "listReleases"):
         listReleases(
         int(sys.argv[2])#uid
         )
-        pass
     elif sys.argv[1] == "popularRelease":  # Task 9
         N = int(sys.argv[2])
-        popularRelease(conn, N)
-        pass
+        popularRelease(global_connect, N)
     elif sys.argv[1] == "releaseTitle":  # Task 10
         sid = int(sys.argv[2])
-        releaseTitle(conn, sid)
-        pass
+        releaseTitle(global_connect, sid)
     elif sys.argv[1] == "activeViewer":  # Task 11
         N = int(sys.argv[2])
         start_date = sys.argv[3]
         end_date = sys.argv[4]
-        activeViewer(conn, N, start_date, end_date)
-        pass
+        activeViewer(global_connect, N, start_date, end_date)
     elif sys.argv[1] == "videosViewed":  # Task 12
         rid = int(sys.argv[2])
-        videosViewed(conn, rid)
-        pass
+        videosViewed(global_connect, rid)
+
 
     if (global_connect.is_connected()):
         global_connect.commit()
