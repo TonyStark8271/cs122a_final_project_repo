@@ -7,7 +7,7 @@ import re
 from utility import connect_db
 from datetime import datetime
 
-from functionsDY import insertViewer
+from functionsDY import insertViewer, addGenre
 from part2 import insertMovie, insertSession, updateRelease, listReleases
 date_format = "%Y-%m-%d"
 
@@ -143,8 +143,7 @@ if __name__ == "__main__":
                      sys.argv[13], #subscription
                      )
     elif (sys.argv[1] == "addGenre"):
-        #addGenre()
-        pass
+        addGenre(global_connect, sys.argv[2], sys.argv[3])
     elif (sys.argv[1] == "deleteViewer"):
         #deleteViewer()
         pass
