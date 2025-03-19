@@ -13,17 +13,18 @@ def insertViewer(conn, uid, email,
         uids = [row[0] for row in result]
 
         if uid not in uids: 
-            inserting_viewer = f"""
-            INSERT INTO Viewers (uid, subscription, first_name, last_name)
-            VALUES ('{uid}', '{subscription}', '{first}', '{last}');
-            """
-            execute_query(conn, inserting_viewer)
-
             inserting_user = f"""
             INSERT INTO Users (uid, email, joined_date, nickname, street, city, state, zip, genres)
             VALUES ('{uid}', '{email}', '{joined_date}', '{nickname}', '{street}', '{city}', '{state}', '{zip_code}', '{genres}');
             """
             execute_query(conn, inserting_user)
+
+            inserting_viewer = f"""
+            INSERT INTO Viewers (uid, subscription, first_name, last_name)
+            VALUES ('{uid}', '{subscription}', '{first}', '{last}');
+            """
+            execute_query(conn, inserting_viewer)
+            
             print("Success")
         else:
             print("Fail")
