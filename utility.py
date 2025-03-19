@@ -1,7 +1,7 @@
 import mysql.connector as mysql
 import sys
 
-
+"""
 DB_CONFIG = {
     "user": "test",
     "password": "password",
@@ -16,7 +16,7 @@ DB_CONFIG = {
     "database": "zotstreaming",
     "allow_local_infile": True
 }
-"""
+
 
 def connect_db():
     """Funciton for establish connection to the MySQL database"""

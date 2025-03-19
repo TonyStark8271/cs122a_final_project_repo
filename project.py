@@ -126,16 +126,16 @@ def import_data(path):
         set_primary_sid = "ALTER TABLE Sessions ADD PRIMARY KEY (sid);"
         cursor.execute(set_primary_sid)
 
-        set_foreign_sessions1 = "ALTER TABLE Sessions ADD CONSTRAINT fk_sessions_viewers FOREIGN KEY (uid) REFERENCES Viewers(uid) ON DELETE CASCADE;"
-        set_foreign_sessions2 = "ALTER TABLE Sessions ADD CONSTRAINT fk_sessions_releases FOREIGN KEY (rid) REFERENCES Releases(uid) ON DELETE CASCADE;"
-        cursor.execute(set_foreign_sessions1)
-        cursor.execute(set_foreign_sessions2)
-
         set_primary_producers = "ALTER TABLE Producers ADD PRIMARY KEY (uid);"
         cursor.execute(set_primary_producers)
 
         set_primary_viewers = "ALTER TABLE Viewers ADD PRIMARY KEY (uid);"
         cursor.execute(set_primary_viewers)
+
+        set_foreign_sessions1 = "ALTER TABLE Sessions ADD CONSTRAINT fk_sessions_viewers FOREIGN KEY (uid) REFERENCES Viewers(uid) ON DELETE CASCADE;"
+        set_foreign_sessions2 = "ALTER TABLE Sessions ADD CONSTRAINT fk_sessions_releases FOREIGN KEY (rid) REFERENCES Releases(rid) ON DELETE CASCADE;"
+        cursor.execute(set_foreign_sessions1)
+        cursor.execute(set_foreign_sessions2)
 
         set_foreign_key_producers = "ALTER TABLE Producers ADD CONSTRAINT fk_producers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
         set_foreign_key_viewers = "ALTER TABLE Viewers ADD CONSTRAINT fk_viewers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
