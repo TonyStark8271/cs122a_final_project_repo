@@ -126,6 +126,12 @@ def import_data(path):
         set_primary_sid = "ALTER TABLE Sessions ADD PRIMARY KEY (sid);"
         cursor.execute(set_primary_sid)
 
+        set_primary_producers = "ALTER TABLE Producers ADD PRIMARY KEY (uid);"
+        cursor.execute(set_primary_producers)
+
+        set_primary_viewers = "ALTER TABLE Viewers ADD PRIMARY KEY (uid);"
+        cursor.execute(set_primary_viewers)
+
         set_foreign_key_producers = "ALTER TABLE Producers ADD CONSTRAINT fk_producers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
         set_foreign_key_viewers = "ALTER TABLE Viewers ADD CONSTRAINT fk_viewers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
         cursor.execute(set_foreign_key_producers)
@@ -134,14 +140,14 @@ def import_data(path):
         set_foreign_releases = "ALTER TABLE Releases ADD CONSTRAINT fk_releases_producers FOREIGN KEY (producer_uid) REFERENCES Producers(uid);"
         cursor.execute(set_foreign_releases)
 
-        set_foreign_reviews1 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_users FOREIGN KEY (uid) REFERENCES Users(uid);"
+        set_foreign_reviews1 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_viewers FOREIGN KEY (uid) REFERENCES Viewers(uid);"
         cursor.execute(set_foreign_reviews1)
-        set_foreign_reviews2 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_releases FOREIGN KEY (rid) REFERENCES Releases(uid) ON DELETE CASCADE;"
+        set_foreign_reviews2 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_releases FOREIGN KEY (rid) REFERENCES Releases(rid) ON DELETE CASCADE;"
         cursor.execute(set_foreign_reviews2)
 
         print("Success")
     except mysql.Error as err:
-        print("Fail")
+        print("Fail", err)
         return False
     finally:
         conn.commit()
