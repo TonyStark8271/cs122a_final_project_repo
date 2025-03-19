@@ -76,6 +76,5 @@ def listReleases(uid):
             print(",".join(map(str, row)))
     except mysql.Error as err:
         print("Fail: ", err)
-        return []
     finally:
         conn.close()
