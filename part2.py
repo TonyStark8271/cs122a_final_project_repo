@@ -4,6 +4,9 @@ from utility import execute_query, connect_db
 def insertMovie(conn, rid, website_url):
     try:
         execute_query(conn, "ALTER TABLE Movies ADD CONSTRAINT u_rid UNIQUE (rid);")
+        if rid == None:
+            return False
+        website_url if website_url else None
         execute_query(conn, f"""
         INSERT INTO Movies(rid, website_url) VALUES ('{rid}', '{website_url}');
         """)
@@ -18,7 +21,13 @@ def insertMovie(conn, rid, website_url):
 def insertSession(conn, sid, uid, rid, ep_num, initiate_at,leave_at, quality, device):
     try:
         execute_query(conn, "ALTER TABLE Sessions ADD CONSTRAINT u_sid UNIQUE (sid);")
-
+        if sid == None:
+            return False
+        ep_num if ep_num else None
+        initiate_at if initiate_at else None
+        leave_at if leave_at else None
+        quality if quality else None
+        device if device else None
         execute_query(conn, 
         f"""
         INSERT INTO Sessions(sid, uid, rid, ep_num, initiate_at, leave_at, quality, device)
@@ -35,9 +44,6 @@ def insertSession(conn, sid, uid, rid, ep_num, initiate_at,leave_at, quality, de
 def updateRelease(conn, rid, title):
     try:
         cursor = conn.cursor()
-        if title is None:
-            print("Fail")
-            return False
         select_release = "SELECT 1 FROM Releases WHERE rid = %s;"
         cursor.execute(select_release, (rid,))
         result = cursor.fetchone()

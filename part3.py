@@ -2,10 +2,12 @@ import mysql.connector as mysql
 
 def popularRelease(conn, N):
     """Task 9: Get Most Popular Releases"""
+    if N is None:
+        return []
     cursor = conn.cursor()
     cursor.execute(
         "SELECT r.rid, r.title, COUNT(rv.rid) AS reviewCount "
-        "FROM `Releases` r "
+        "FROM Releases r "
         "LEFT JOIN Reviews rv ON r.rid = rv.rid "
         "GROUP BY r.rid, r.title "
         "ORDER BY reviewCount DESC, r.rid DESC "
@@ -13,8 +15,7 @@ def popularRelease(conn, N):
         (N,)
     )
     results = cursor.fetchall()
-    for row in results:
-        print(",".join(map(str, row)))
+    return results
     cursor.close()
 
 
