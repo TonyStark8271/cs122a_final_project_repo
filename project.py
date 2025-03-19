@@ -137,7 +137,7 @@ def import_data(path):
         cursor.execute(set_foreign_key_producers)
         cursor.execute(set_foreign_key_viewers)
 
-        set_foreign_releases = "ALTER TABLE Releases ADD CONSTRAINT fk_releases_producers FOREIGN KEY (producer_uid) REFERENCES Producers(uid);"
+        set_foreign_releases = "ALTER TABLE Releases ADD CONSTRAINT fk_releases_producers FOREIGN KEY (producer_uid) REFERENCES Producers(uid) ON DELETE CASCADE;"
         cursor.execute(set_foreign_releases)
 
         set_foreign_reviews1 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_viewers FOREIGN KEY (uid) REFERENCES Viewers(uid) ON DELETE CASCADE;"
