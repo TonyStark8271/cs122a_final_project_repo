@@ -7,7 +7,7 @@ def popularRelease(conn, N):
     cursor = conn.cursor()
     cursor.execute(
         "SELECT r.rid, r.title, COUNT(rv.rid) AS reviewCount "
-        "FROM Releases r "
+        "FROM `Releases` r "
         "LEFT JOIN Reviews rv ON r.rid = rv.rid "
         "GROUP BY r.rid, r.title "
         "ORDER BY reviewCount DESC, r.rid DESC "
@@ -15,7 +15,8 @@ def popularRelease(conn, N):
         (N,)
     )
     results = cursor.fetchall()
-    return results
+    for row in results:
+        print(",".join(map(str, row)))
     cursor.close()
 
 
