@@ -73,7 +73,7 @@ def listReleases(uid):
                         "ORDER BY r.title ASC;")
         rows = cursor.fetchall()
         for row in rows:
-            print(", ".join(map(str, row)))
+            print(",".join(map(str, row)))
     except mysql.Error as err:
         print("Fail: ", err)
         return []
