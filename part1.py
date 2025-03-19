@@ -6,20 +6,30 @@ def insertViewer(conn, uid, email,
                   state,zip_code,genres,
                   joined_date,first,last,subscription):
     try:
-        inserting_viewer = f"""
-        INSERT INTO Viewers (uid, subscription, first_name, last_name)
-        VALUES ('{uid}', '{subscription}', '{first}', '{last}');
-        """
-        execute_query(conn, inserting_viewer)
+        cursor = conn.cursor()
+        select_uid = "SELECT uid FROM Users;"
+        cursor.execute(select_uid)
+        result = cursor.fetchall()
+        uids = [row[0] for row in result]
 
-        inserting_user = f"""
-        INSERT INTO Users (uid, email, joined_date, nickname, street, city, state, zip, genres)
-        VALUES ('{uid}', '{email}', '{joined_date}', '{nickname}', '{street}', '{city}', '{state}', '{zip_code}', '{genres}');
-        """
-        execute_query(conn, inserting_user)
-        print("Success")
+        if uid not in uids: 
+            inserting_viewer = f"""
+            INSERT INTO Viewers (uid, subscription, first_name, last_name)
+            VALUES ('{uid}', '{subscription}', '{first}', '{last}');
+            """
+            execute_query(conn, inserting_viewer)
+
+            inserting_user = f"""
+            INSERT INTO Users (uid, email, joined_date, nickname, street, city, state, zip, genres)
+            VALUES ('{uid}', '{email}', '{joined_date}', '{nickname}', '{street}', '{city}', '{state}', '{zip_code}', '{genres}');
+            """
+            execute_query(conn, inserting_user)
+            print("Success")
+        else:
+            print("Fail")
+        cursor.close()
     except mysql.Error as err:
-        print("Fail")
+        print("Fail", err)
     finally:
         conn.close()
 
@@ -35,13 +45,15 @@ def addGenre(conn, uid, genre):
             current_genres = result[0]
             result_list= result[0].lower().split(';')
             if genre.lower() in result_list:
-                print("Success")
+                print("Fail")
             else:
                 append_genre = current_genres + ';' + genre if current_genres else genre 
                 update_genre = "UPDATE Users SET genres = %s WHERE uid = %s;"
                 cursor.execute(update_genre, (append_genre, uid))
                 conn.commit()
                 print("Success")
+        else:
+            print("Fail")
         cursor.close()
     except mysql.Error as err:
         print("Fail")
