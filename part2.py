@@ -34,9 +34,20 @@ def insertSession(conn, sid, uid, rid, ep_num, initiate_at,leave_at, quality, de
 #(7)Update the title of a release
 def updateRelease(conn, rid, title):
     try:
-        execute_query(conn, f"UPDATE Releases SET title = '{title}' WHERE rid = '{rid}';")
-        print("Success")
-        return True
+        cursor = conn.cursor()
+        if title is None or title.strip() == "":
+            print("Fail")
+            return False
+        select_release = "SELECT 1 FROM Releases WHERE rid = %s;"
+        cursor.execute(select_release, (rid,))
+        result = cursor.fetchone()
+        if result:
+            execute_query(conn, f"UPDATE Releases SET title = '{title}' WHERE rid = '{rid}';")
+            print("Success")
+            return True
+        else:
+            print("Fail")
+            return False
     except mysql.Error as err:
         print("Fail: ", err)
         return False
@@ -47,12 +58,15 @@ def listReleases(uid):
     conn = connect_db()
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
-                        "FROM Releases r, Reviews rvs\n" + 
-                        f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
-                        "ORDER BY r.title ASC;")
-        rows = cursor.fetchall()
-        return rows
+        if uid is None:
+            return []
+        else:
+            cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
+                            "FROM Releases r, Reviews rvs\n" + 
+                            f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
+                            "ORDER BY r.title ASC;")
+            rows = cursor.fetchall()
+            return rows
     except mysql.Error as err:
         print("Fail: ", err)
         return []
