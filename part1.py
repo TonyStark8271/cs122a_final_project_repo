@@ -63,8 +63,6 @@ def addGenre(conn, uid, genre):
 
 def deleteViewer(conn, uid):
     try:
-        execute_query(conn, "ALTER TABLE Users ADD PRIMARY KEY (uid); ")
-        execute_query(conn, "ALTER TABLE Viewers ADD FOREIGN KEY (uid) REFERENCES Users(uid);")
         deleViewerQuerry = f"DELETE FROM Viewers WHERE uid = {uid}"
         execute_query(conn, deleViewerQuerry)
         
