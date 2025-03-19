@@ -71,8 +71,8 @@ def listReleases(uid):
                         f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
                         "ORDER BY r.title ASC;")
         rows = cursor.fetchall()
-        for row in results:
-        print(",".join(map(str, row)))
+        for row in rows:
+            print(",".join(map(str, row)))
     except mysql.Error as err:
         print("Fail: ", err)
         return []
