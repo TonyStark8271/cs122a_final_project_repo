@@ -37,7 +37,7 @@ def insertViewer(conn, uid, email,
 def addGenre(conn, uid, genre):
     try:
         cursor = conn.cursor()
-        select_genre = "SELECT genres FROM users WHERE uid = %s;"
+        select_genre = "SELECT genres FROM Users WHERE uid = %s;"
         cursor.execute(select_genre, (uid,))
         result = cursor.fetchone()
 
