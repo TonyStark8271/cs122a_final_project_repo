@@ -35,7 +35,7 @@ def insertSession(conn, sid, uid, rid, ep_num, initiate_at,leave_at, quality, de
 def updateRelease(conn, rid, title):
     try:
         cursor = conn.cursor()
-        if title is None or title.strip() == "":
+        if title is None:
             print("Fail")
             return False
         select_release = "SELECT 1 FROM Releases WHERE rid = %s;"
@@ -58,17 +58,13 @@ def listReleases(uid):
     conn = connect_db()
     try:
         cursor = conn.cursor()
-        if uid is None:
-            return []
-        else:
-            cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
-                            "FROM Releases r, Reviews rvs\n" + 
-                            f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
-                            "ORDER BY r.title ASC;")
-            rows = cursor.fetchall()
-            return rows
+        cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
+                        "FROM Releases r, Reviews rvs\n" + 
+                        f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
+                        "ORDER BY r.title ASC;")
+        rows = cursor.fetchall()
+        return rows
     except mysql.Error as err:
         print("Fail: ", err)
-        return []
     finally:
         conn.close()
