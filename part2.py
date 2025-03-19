@@ -58,13 +58,17 @@ def listReleases(uid):
     conn = connect_db()
     try:
         cursor = conn.cursor()
+        if uid is None:
+            return []
         cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
                         "FROM Releases r, Reviews rvs\n" + 
                         f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
                         "ORDER BY r.title ASC;")
         rows = cursor.fetchall()
-        return rows
+        cursor.close()
+        return rows if rows else []
     except mysql.Error as err:
         print("Fail: ", err)
+        return []
     finally:
         conn.close()
