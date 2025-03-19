@@ -48,8 +48,8 @@ def listReleases(uid):
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
-                        "FROM Releases r, reviews rvs\n" + 
-                        f"WHERE r.rid  = rvs.rid AND uid = '{uid}'\n" +
+                        "FROM releases r, reviews rvs\n" + 
+                        f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
                         "ORDER BY r.title ASC;")
         rows = cursor.fetchall()
         for row in rows:
@@ -57,5 +57,6 @@ def listReleases(uid):
         return rows
     except mysql.Error as err:
         print("Fail: ", err)
+        return []
     finally:
         conn.close()
