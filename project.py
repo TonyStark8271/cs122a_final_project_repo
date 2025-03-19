@@ -114,6 +114,23 @@ def import_data(path):
                     data = [tuple(row) for row in reader]
                     if data:
                         cursor.executemany(insert_query, data)
+        set_primary_uid = "ALTER TABLE Users ADD PRIMARY KEY (uid);"
+        cursor.execute(set_primary_uid)
+
+        set_primary_rid = "ALTER TABLE Releases ADD PRIMARY KEY (rid);"
+        cursor.execute(set_primary_rid)
+
+        set_primary_rvid = "ALTER TABLE Reviews ADD PRIMARY KEY (rvid);"
+        cursor.execute(set_primary_rvid)
+
+        set_primary_sid = "ALTER TABLE Sessions ADD PRIMARY KEY (sid);"
+        cursor.execute(set_primary_sid)
+
+        set_foreign_key_producers = "ALTER TABLE Producers ADD CONSTRAINT fk_producers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
+        set_foreign_key_viewers = "ALTER TABLE Viewers ADD CONSTRAINT fk_viewers_users FOREIGN KEY (uid) REFERENCES Users(uid) ON DELETE CASCADE;"
+        cursor.execute(set_foreign_key_producers)
+        cursor.execute(set_foreign_key_viewers)
+
         print("Success")
     except mysql.Error as err:
         print("Fail")
