@@ -131,6 +131,14 @@ def import_data(path):
         cursor.execute(set_foreign_key_producers)
         cursor.execute(set_foreign_key_viewers)
 
+        set_foreign_releases = "ALTER TABLE Releases ADD CONSTRAINT fk_releases_producers FOREIGN KEY (producer_uid) REFERENCES Producers(uid);"
+        cursor.execute(set_foreign_releases)
+
+        set_foreign_reviews1 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_users FOREIGN KEY (uid) REFERENCES Users(uid);"
+        cursor.execute(set_foreign_reviews1)
+        set_foreign_reviews2 = "ALTER TABLE Reviews ADD CONSTRAINT fk_reviews_releases FOREIGN KEY (rid) REFERENCES Releases(uid) ON DELETE CASCADE;"
+        cursor.execute(set_foreign_reviews2)
+
         print("Success")
     except mysql.Error as err:
         print("Fail")
