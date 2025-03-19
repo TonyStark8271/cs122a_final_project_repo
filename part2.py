@@ -66,13 +66,14 @@ def listReleases(uid):
         cursor = conn.cursor()
         if uid is None:
             return []
-        cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title\n" +
-                        "FROM Releases r, Reviews rvs\n" + 
-                        f"WHERE r.rid  = rvs.rid AND rvs.uid = '{uid}'\n" +
+        cursor.execute("SELECT DISTINCT r.rid, r.genre, r.title " +
+                        "FROM Reviews as rvs " + 
+                        "JOIN Releases r ON rvs.rid = r.rid\n" +
+                        f"WHERE rvs.uid = '{uid}'\n" +
                         "ORDER BY r.title ASC;")
         rows = cursor.fetchall()
         for row in rows:
-            print(",".join(map(str, row)))
+            print(", ".join(map(str, row)))
     except mysql.Error as err:
         print("Fail: ", err)
         return []
