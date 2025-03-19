@@ -29,7 +29,7 @@ def insertViewer(conn, uid, email,
             print("Fail")
         cursor.close()
     except mysql.Error as err:
-        print("Fail", err)
+        print("Fail")
     finally:
         conn.close()
 
