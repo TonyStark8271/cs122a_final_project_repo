@@ -67,10 +67,9 @@ def videosViewed(conn, rid):
     cursor.execute(
         "SELECT v.rid, v.ep_num, v.title, v.length, COUNT(DISTINCT s.uid) AS viewer_count "
         "FROM Videos v "
-        "LEFT JOIN Sessions s ON v.rid = s.rid AND v.ep_num = s.ep_num "
+        "LEFT JOIN Sessions s ON v.rid = s.rid "
         "WHERE v.rid = %s "
-        "GROUP BY v.rid, v.ep_num, v.title, v.length "
-        "ORDER BY v.rid DESC;",
+        "GROUP BY v.rid, v.ep_num, v.title, v.length;",
         (rid,)
     )
     results = cursor.fetchall()
